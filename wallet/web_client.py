@@ -14,7 +14,7 @@ from seleniumwire import webdriver
 
 class Client:
     def __init__(self, headless: bool = True, profile: str = 'main', temp_dir_path: str = None,
-                 page_load_strategy='none'):
+                 page_load_strategy='none', mode: str = "chrome"):
         """
 
         :param headless: hide or open browser
@@ -32,14 +32,24 @@ class Client:
             temp_dir_path = os.getcwd() + '\\_temp\\' + 'profile_' + str(profile)
         os.makedirs(temp_dir_path, exist_ok=True)
 
-        options = ChromeOptions()
-        options.add_argument(f"--user-data-dir={temp_dir_path}")
-        options.page_load_strategy = page_load_strategy
-        if headless:
-            options.add_argument('--headless=new')
+        if mode == 'chrome':
+            options = ChromeOptions()
+            options.add_argument(f"--user-data-dir={temp_dir_path}")
+            options.page_load_strategy = page_load_strategy
+            if headless:
+                options.add_argument('--headless=new')
 
-        self.driver = webdriver.Chrome(chrome_options=options)
-        self.driver.implicitly_wait(7)
+            self.driver = webdriver.Chrome(chrome_options=options)
+            self.driver.implicitly_wait(7)
+            
+        elif mode == 'firefox':
+            options = webdriver.FirefoxOptions()
+            options.add_argument(f"--user-data-dir={temp_dir_path}")
+            options.page_load_strategy = page_load_strategy
+            if headless:
+                options.headless = True
+            self.driver = webdriver.Firefox(options=options)
+            self.driver.implicitly_wait(7)
 
     @classmethod
     def auth(cls, profile, temp_dir_path=None):
