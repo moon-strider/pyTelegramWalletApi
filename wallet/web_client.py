@@ -6,6 +6,7 @@ import time
 
 from selenium.common import TimeoutException
 from selenium.webdriver import ChromeOptions, FirefoxOptions
+from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -47,13 +48,13 @@ class Client:
             if not os.path.exists(profile_path):
                 os.makedirs(profile_path)
 
+            firefox_profile = FirefoxProfile(profile_path)
             options = FirefoxOptions()
-            options.set_preference("profile", profile_path)
             options.page_load_strategy = page_load_strategy
             if headless:
-                options.headless = True
+                options.add_argument("--headless")
 
-            self.driver = webdriver.Firefox(options=options)
+            self.driver = webdriver.Firefox(firefox_profile=firefox_profile, options=options)
             self.driver.implicitly_wait(7)
 
     @classmethod
