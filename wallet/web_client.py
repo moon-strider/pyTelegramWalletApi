@@ -11,6 +11,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from seleniumwire import webdriver
+from selenium.webdriver.firefox.service import Service
 
 
 class Client:
@@ -48,13 +49,15 @@ class Client:
             if not os.path.exists(profile_path):
                 os.makedirs(profile_path)
 
+            service = Service('/usr/local/bin/geckodriver')
+
             options = FirefoxOptions()
             options.profile = profile_path  # Set the profile directory
             options.page_load_strategy = page_load_strategy
             if headless:
                 options.add_argument("--headless")
 
-            self.driver = webdriver.Firefox(options=options)
+            self.driver = webdriver.Firefox(service=service, options=options)
             self.driver.implicitly_wait(7)
 
     @classmethod
