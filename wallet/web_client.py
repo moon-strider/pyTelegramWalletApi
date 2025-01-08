@@ -54,7 +54,7 @@ class Client:
             if headless:
                 options.add_argument("--headless")
 
-            self.driver = webdriver.Firefox(firefox_profile=firefox_profile, options=options)
+            self.driver = webdriver.Firefox(options=options)
             self.driver.implicitly_wait(7)
 
     @classmethod
