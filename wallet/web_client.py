@@ -5,7 +5,7 @@ import threading
 import time
 
 from selenium.common import TimeoutException
-from selenium.webdriver import ChromeOptions
+from selenium.webdriver import ChromeOptions, FirefoxOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -41,13 +41,18 @@ class Client:
 
             self.driver = webdriver.Chrome(chrome_options=options)
             self.driver.implicitly_wait(7)
-            
+
         elif mode == 'firefox':
-            options = webdriver.FirefoxOptions()
-            options.add_argument(f"--user-data-dir={temp_dir_path}")
+            profile_path = os.path.join(temp_dir_path, f"profile_{profile}")
+            if not os.path.exists(profile_path):
+                os.makedirs(profile_path)
+
+            options = FirefoxOptions()
+            options.set_preference("profile", profile_path)
             options.page_load_strategy = page_load_strategy
             if headless:
                 options.headless = True
+
             self.driver = webdriver.Firefox(options=options)
             self.driver.implicitly_wait(7)
 
