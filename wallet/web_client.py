@@ -48,8 +48,8 @@ class Client:
             if not os.path.exists(profile_path):
                 os.makedirs(profile_path)
 
-            firefox_profile = FirefoxProfile(profile_path)
             options = FirefoxOptions()
+            options.profile = profile_path  # Set the profile directory
             options.page_load_strategy = page_load_strategy
             if headless:
                 options.add_argument("--headless")
